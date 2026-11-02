@@ -1,0 +1,9 @@
+node_modules/
+.pnpm-store/
+.output/
+.wxt/
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example

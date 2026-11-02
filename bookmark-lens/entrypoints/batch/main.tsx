@@ -1,0 +1,6 @@
+import {createRoot} from 'react-dom/client';
+import {useEffect,useState} from 'react';
+import {runBatch} from '../../lib/batch-engine';
+import {batchCounts,readJob,JOB_KEY,COMMAND_KEY,type BatchJob} from '../../lib/batch-model';
+function Runner(){const [job,setJob]=useState<BatchJob>(),[error,setError]=useState('');useEffect(()=>{const listener=()=>{void readJob().then(setJob);};chrome.storage.onChanged.addListener(listener);listener();void runBatch(location.hash.slice(1)).catch(e=>setError(String(e)));return()=>chrome.storage.onChanged.removeListener(listener);},[]);const counts=job?batchCounts(job):undefined;return <main style={{fontFamily:'system-ui',padding:48,background:'#18181b',color:'#eee',minHeight:'100vh'}}><h1>Bookmark Lens 批量任务</h1><p>任务逐个打开网站，此页会暂时留在后台。不要关闭此窗口；可在管理页查看进度和暂停。</p><p>{error||job?.error||job?.status}</p><p>成功 {counts?.success??0} · 失败 {counts?.failed??0} · 跳过 {counts?.skipped??0} / {counts?.total??0}</p>{(['pause','stop'] as const).map(action=><button key={action} disabled={job?.status!=='running'} style={{padding:12,marginRight:12}} onClick={()=>void chrome.storage.local.set({[COMMAND_KEY]:{jobId:job?.id,action,time:Date.now()}})}>{action==='pause'?'暂停':'停止'}</button>)}<p>任务结束后可关闭此窗口；已经成功保存的截图会保留。</p></main>;}
+createRoot(document.getElementById('root')!).render(<Runner/>);

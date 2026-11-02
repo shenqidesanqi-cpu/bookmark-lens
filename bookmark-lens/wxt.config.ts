@@ -1,0 +1,3 @@
+import { defineConfig } from 'wxt';
+import tailwindcss from '@tailwindcss/vite';
+export default defineConfig({ manifestVersion: 3, modules: ['@wxt-dev/module-react'], manifest: { name: 'Bookmark Lens', icons: { 16: '/icon/16.png', 32: '/icon/32.png', 48: '/icon/48.png', 128: '/icon/128.png' }, description: '在侧边栏快速浏览与预览本地书签', optional_host_permissions: ['https://*/*', 'http://*/*', '<all_urls>'], minimum_chrome_version: '114', permissions: ['bookmarks', 'sidePanel', 'storage', 'favicon', 'contextMenus', 'activeTab', 'scripting'], action: { default_icon: { 16: '/icon/16.png', 32: '/icon/32.png', 48: '/icon/48.png', 128: '/icon/128.png' }, default_title: '打开 Bookmark Lens 管理页' } }, vite: () => ({ plugins: [tailwindcss()] }) });
